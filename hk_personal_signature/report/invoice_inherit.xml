@@ -76,7 +76,7 @@
     <record id="hk_invoice_vydn_account_move_report_" model="ir.actions.report">
         <field name="name">Vydatkova Nakladna Invoice</field>
         <field name="model">account.move</field>
-        <field name="report_type">qweb-pdf</field>
+        <field name="report_type">qweb-html</field>
         <field name="report_name">hk_personal_signature.hk_invoice_vydn_container_inherit</field>
         <field name="report_file">hk_personal_signature.hk_invoice_vydn_container_inherit</field>
         <field name="print_report_name">(object.state in ('draft', 'sent') and 'Vydatkova - %s' % (object.name)) or 'Vydatkova - %s' % (object.name)</field>
@@ -139,66 +139,71 @@
 
     <template id="hk_invoice_rahf_template_inherit" inherit_id="kw_invoice_rahf.kw_invoice_rahf_template">
         <xpath expr="//table[5]//tr//td//span" position="before">
-            <t t-if="doc.user_id.sign_image and doc.company_id.stamp_image">
-                <t t-if="print_with_stamp">
-                    <span style="position: relative; left: 0px; top: 0px;">
-                        <img style="max-height:1cm; max-width:4cm; position: relative; right: -20px; top: -10px;"
+            <t t-if="print_with_stamp">
+                <span style="position: relative; left: 0px; top: 0px;">
+                    <t t-if="doc.user_id.sign_image">
+                        <img style="max-height:1cm; max-width:4cm; position: absolute; right: -120px; top: -10px;"
                              t-att-src="'data:image/png;base64,%s' % to_text(doc.user_id.sign_image)"/>
-                        <img style="max-height:5cm; max-width:5cm; position: absolute; right: 0px; top: -10px;"
+                    </t>
+                    <t t-if="doc.company_id.stamp_image">
+                        <img style="max-height:5cm; max-width:5cm; position: absolute; right: -120px; top: 0px;"
                              t-att-src="'data:image/png;base64,%s' % to_text(doc.company_id.stamp_image)"/>
-                    </span>
-                </t>
+                    </t>
+                </span>
             </t>
         </xpath>
     </template>
 
+    <template id="hk_sale_fakt" inherit_id="kw_so_rahf.kw_so_rahf_template">
+        <xpath expr="//table[5]/tr/td/span" position="before">
+            <t t-if="print_with_stamp">
+                <span style="position: relative; left: 0px; top: 0px;">
+                    <t t-if="doc.user_id.sign_image">
+                        <img style="max-height:1cm; max-width:4cm; position: absolute; right: -130px; top: -15px;"
+                             t-att-src="'data:image/png;base64,%s' % to_text(doc.user_id.sign_image)"/>
+                    </t>
+                    <t t-if="doc.company_id.stamp_image">
+                        <img style="max-height:5cm; max-width:5cm; position: absolute; right: -120px; top: 0px;"
+                             t-att-src="'data:image/png;base64,%s' % to_text(doc.company_id.stamp_image)"/>
+                    </t>
+                </span>
+            </t>
+        </xpath>
+    </template>
 
     <template id="hk_invoice_vydn" inherit_id="kw_invoice_vydn.kw_invoice_vydn_template">
         <xpath expr="//table[6]//tr//td//h5" position="after">
-            <t t-if="doc.user_id.sign_image and doc.company_id.stamp_image">
-                <t t-if="print_with_stamp">
-                    <span style="position: relative; left: 0px; top: 0px;">
+            <t t-if="print_with_stamp">
+                <span style="position: relative; left: 0px; top: 0px;">
+                    <t t-if="doc.user_id.sign_image">
                         <img style="max-height:1cm; max-width:4cm; position: absolute; left: 0px; top: 20px; margin:0px; padding:0px;"
                              t-att-src="'data:image/png;base64,%s' % to_text(doc.user_id.sign_image)"/>
-                        <t t-if="doc.company_id.partner_id">
-                            <img style="max-height:5cm; max-width:5cm; position: absolute; left: 20px; top: -10px;"
-                                 t-att-src="'data:image/png;base64,%s' % to_text(doc.company_id.stamp_image)"/>
-                        </t>
-                    </span>
-                </t>
+                    </t>
+                    <t t-if="doc.company_id.stamp_image">
+                        <img style="max-height:5cm; max-width:5cm; position: absolute; left: 20px; top: 40px;"
+                             t-att-src="'data:image/png;base64,%s' % to_text(doc.company_id.stamp_image)"/>
+                    </t>
+                </span>
             </t>
         </xpath>
     </template>
 
     <template id="hk_so_vydn" inherit_id="kw_so_vydn.kw_so_vydn_template">
         <xpath expr="//table[6]//tr//td//h5" position="after">
-            <t t-if="doc.user_id.sign_image and doc.company_id.stamp_image">
-                <t t-if="print_with_stamp">
-                    <span style="position: relative; left: 0px; top: 0px;">
-                        <img style="max-height:1cm; max-width:4cm; position: absolute; left: 10px; top: 0px;"
+            <t t-if="print_with_stamp">
+                <span style="position: relative; left: 0px; top: 0px;">
+                    <t t-if="doc.user_id.sign_image">
+                        <img style="max-height:1cm; max-width:4cm; position: absolute; left: 0px; top: 20px;"
                              t-att-src="'data:image/png;base64,%s' % to_text(doc.user_id.sign_image)"/>
-                        <img style="max-height:5cm; max-width:5cm; position: absolute; left: 0px; top: -10px;"
+                    </t>
+                    <t t-if="doc.company_id.stamp_image">
+                        <img style="max-height:5cm; max-width:5cm; position: absolute; left: 20px; top: 40px;"
                              t-att-src="'data:image/png;base64,%s' % to_text(doc.company_id.stamp_image)"/>
-                    </span>
-                </t>
+                    </t>
+                </span>
             </t>
         </xpath>
     </template>
 
-    <template id="hk_sale_fakt" inherit_id="kw_so_rahf.kw_so_rahf_template">
-        <xpath expr="//table[5]//tr//td" position="inside">
-            <t t-if="doc.user_id.sign_image and doc.company_id.stamp_image">
-                <t t-if="print_with_stamp">
-                    <span>
-                        <img style="max-height:1cm; max-width:4cm; position: relative; left: 0px; top: -150px;"
-                             t-att-src="'data:image/png;base64,%s' % to_text(doc.user_id.sign_image)"/>
-                    </span>
-                    <span>
-                        <img style="max-height:5cm; max-width:5cm; position: relative; left: 0px; top: -100px;"
-                             t-att-src="'data:image/png;base64,%s' % to_text(doc.company_id.stamp_image)"/>
-                    </span>
-                </t>
-            </t>
-        </xpath>
-    </template>
+
 </odoo>
